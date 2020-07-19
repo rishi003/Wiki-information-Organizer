@@ -4,12 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wiki Information Organizer</title>
+    <link rel="stylesheet" href="./custom.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -33,8 +38,23 @@
           <i class="material-icons right">search</i>
         </button>
       </form>
-      <div class="carousel" style="visibility: hidden;"></div>
+      <div
+        class="preloader-wrapper big active"
+        style="visibility: hidden; position: absolute; top: 50%; left: 50%;"
+      >
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
       </div>
+      <div class="carousel" style="visibility: hidden;"></div>
     </div>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -54,20 +74,43 @@
       $("#searchForm").ajaxForm({
         url: "formData",
         type: "get",
+        beforeSubmit: function () {
+          $(".preloader-wrapper").css("visibility", "visible");
+        },
         success: function (val) {
-          $('form').remove()
+          $(".preloader-wrapper").css("visibility", "hidden");
+          $("form").remove();
           $(".brand-logo").text(val.title);
-          $('.container')
-          $('.carousel').css('visibility','visible');
-          for(var i = 0; i < val.imgs.length; i++){
-            $('<img/>',{
-              src : val.imgs[i],
-              'class' : 'carousel-item'
-            }).appendTo($('.carousel'));
+          $(".container");
+          $(".carousel").css("visibility", "visible");
+          for (var i = 0; i < val.imgs.length; i++) {
+            $("<img/>", {
+              src: val.imgs[i],
+              class: "carousel-item",
+            }).appendTo($(".carousel"));
           }
-          $('.carousel').carousel();
-          $('.carousel').appendTo($('.container'));
-          $('.container').appendTo('body')
+          $(".carousel").carousel();
+          $(".carousel").appendTo($(".container"));
+          $(".container").appendTo("body");
+
+          var linksContainer = document.createElement("div");
+          $(linksContainer).addClass("row");
+
+          for (var i = 0; i < val.links.length; i++) {
+            var colDiv = document.createElement("div");
+            $(colDiv).addClass("col s3");
+            $("<a/>", {
+              target: "_blank",
+              href: val.links[i],
+              style:
+                "font-family: 'Crimson Text', serif; text-decoration: none; color:black; font-size: 1.25rem; word-wrap:break-word;",
+            })
+              .text(val.links[i].substr(0, 20) + "...")
+              .appendTo($(colDiv));
+            $(colDiv).appendTo($(linksContainer));
+          }
+          $("<h2>Helpful External Links</h2>").appendTo($(".container"));
+          $(linksContainer).appendTo($(".container"));
         },
       });
     });
