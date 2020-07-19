@@ -2,26 +2,51 @@
 const express = require("express");
 const app = express();
 const puppeteer = require("puppeteer");
+const { S_IFDIR } = require("constants");
 const port = 3000;
 
 async function getWikiPage(pageName) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+  let data = {};
   await page.goto("https://en.wikipedia.org/wiki/" + pageName, {
     waitUntil: "networkidle0",
   });
-  const imgs = await page.$$eval("img", (imgs) =>
+  data.imgs = await page.$$eval("img", (imgs) =>
     imgs.map((img) => img.getAttribute("src"))
   );
-  console.log(imgs);
-  const data = await page.evaluate(() => {
-    return document.querySelector("*").outerHTML;
+
+  data.imgs = data.imgs.filter((img) => {
+    return (
+      !img.includes(".svg.png") &&
+      !img.includes("/static/images") &&
+      !img.includes("Red_Pencil_Icon.png") &&
+      !img.includes("data:image")
+    );
   });
+
+  data.title = await page.$eval("h1", (heading) => heading.textContent);
+
+  data.links = await page.$$eval("a", (as) => as.map((a) => a.href));
+  data.links = data.links.filter((link) => {
+    return (
+      !link.includes("#cite") &&
+      link != "" &&
+      !link.includes("Good_articles") &&
+      !link.includes("Protection") &&
+      !link.includes("wikipedia.org")
+    );
+  });
+  browser.close();
   return data;
 }
 
 async function getWikiLink(hrefAttr) {
   return "https://en.wikipedia.org/" + hrefAttr;
+}
+
+async function getTextContent(body) {
+  return body;
 }
 
 async function getPage(pageName) {

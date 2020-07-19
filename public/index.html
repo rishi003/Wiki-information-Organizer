@@ -15,7 +15,7 @@
   </head>
   <body>
     <nav class="blue-grey darken-4" style="padding: 0rem 1rem 0rem 1rem;">
-      <a href="#" class="brand-logo">Wiki Information Organizer</a>
+      <span class="brand-logo">Wiki Information Organizer</span>
     </nav>
     <div class="container">
       <form class="center-align" id="searchForm">
@@ -33,7 +33,8 @@
           <i class="material-icons right">search</i>
         </button>
       </form>
-      <div id="output" style="word-wrap: break-word;"></div>
+      <div class="carousel" style="visibility: hidden;"></div>
+      </div>
     </div>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -44,12 +45,29 @@
     crossorigin="anonymous"
   ></script>
   <script>
+    $(document).ready(function () {
+      $(".materialboxed").materialbox();
+    });
+  </script>
+  <script>
     $(function () {
       $("#searchForm").ajaxForm({
         url: "formData",
         type: "get",
         success: function (val) {
-          $("#output").text(val);
+          $('form').remove()
+          $(".brand-logo").text(val.title);
+          $('.container')
+          $('.carousel').css('visibility','visible');
+          for(var i = 0; i < val.imgs.length; i++){
+            $('<img/>',{
+              src : val.imgs[i],
+              'class' : 'carousel-item'
+            }).appendTo($('.carousel'));
+          }
+          $('.carousel').carousel();
+          $('.carousel').appendTo($('.container'));
+          $('.container').appendTo('body')
         },
       });
     });
