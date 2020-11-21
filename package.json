@@ -1,0 +1,25 @@
+{
+  "name": "Wiki-Information-Organizer",
+  "version": "1.0.0",
+  "description": "Web scrapes a wikipedia page and organizes information in more accessible manner.",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer": "^5.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rishi003/Wiki-Information-Organizer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rishi003/Wiki-Information-Organizer/issues"
+  },
+  "homepage": "https://github.com/rishi003/Wiki-Information-Organizer#readme"
+}
