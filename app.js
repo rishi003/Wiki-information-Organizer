@@ -79,6 +79,7 @@ app.get("/formData", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`App is listening on http://localhost:${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
 });
