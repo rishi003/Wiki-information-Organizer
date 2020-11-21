@@ -6,7 +6,7 @@ const { S_IFDIR } = require("constants");
 const port = 3000;
 
 async function getWikiPage(pageName) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
   const page = await browser.newPage();
   let data = {};
   await page.goto("https://en.wikipedia.org/wiki/" + pageName, {
