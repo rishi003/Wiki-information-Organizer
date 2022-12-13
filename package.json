@@ -4,7 +4,7 @@
   "description": "Web scrapes a wikipedia page and organizes information in more accessible manner.",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "puppeteer": "^5.1.0"
   },
   "devDependencies": {},
